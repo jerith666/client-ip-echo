@@ -19,9 +19,9 @@ shiftmask x y z = (.&.) (shiftR (toInteger x) y) z
 hostaddr :: SockAddr -> String
 hostaddr (SockAddrInet _ hAddr) =
   let 
-      w1 = shiftmask hAddr 24 8
-      w2 = shiftmask hAddr 16 8
-      w3 = shiftmask hAddr 8  8
-      w4 = shiftmask hAddr 0  8
+      w1 = shiftmask hAddr 24 7
+      w2 = shiftmask hAddr 16 7
+      w3 = shiftmask hAddr 8  7
+      w4 = shiftmask hAddr 0  7
   in (show w1) ++ "." ++ (show w2) ++ "." ++ (show w3) ++ "." ++ (show w4)
 hostaddr _ = "unsupported address type"
