@@ -7,14 +7,13 @@ import qualified Data.ByteString.Char8 as C
 import Data.Bits
 import Data.Word
 
-main = do {
-         ios <- socket AF_INET Stream defaultProtocol;
-	 bind ios (SockAddrInet (4242::PortNumber) iNADDR_ANY );
-	 listen ios 1;
-	 (s, addr) <- accept ios;
-	 putStrLn ("accepted connection from " ++ (hostaddr addr));
-	 send s (C.pack (hostaddr addr));
-       }
+main = do ios <- socket AF_INET Stream defaultProtocol
+	  bind ios (SockAddrInet (4242::PortNumber) iNADDR_ANY )
+	  listen ios 1
+	  (s, addr) <- accept ios
+	  let addrs = hostaddr addr
+	  putStrLn ("accepted connection from " ++ addrs)
+	  send s (C.pack addrs)
 
 shiftmask :: Word32 -> Int -> Integer -> Integer
 shiftmask x y z = (.&.) (shiftR (toInteger x) y) z
