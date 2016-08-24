@@ -1,7 +1,9 @@
 --- nix-shell -p "haskellPackages.ghcWithPackages (pkgs: [pkgs.network])"
 
 --- import Network
-import Network.Socket
+import Network.Socket hiding (send, sendTo, recv, recvFrom)
+import Network.Socket.ByteString
+import qualified Data.ByteString.Char8 as C
 import Data.Bits
 import Data.Word
 
@@ -11,6 +13,7 @@ main = do {
 	 listen ios 1;
 	 (s, addr) <- accept ios;
 	 putStrLn ("accepted connection from " ++ (hostaddr addr));
+	 send s (C.pack (hostaddr addr));
        }
 
 shiftmask :: Word32 -> Int -> Integer -> Integer
