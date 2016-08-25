@@ -1,19 +1,26 @@
 --- nix-shell -p "haskellPackages.ghcWithPackages (pkgs: [pkgs.network])"
 
 --- import Network
+import System.Environment
 import Network.Socket hiding (send, sendTo, recv, recvFrom)
 import Network.Socket.ByteString
 import qualified Data.ByteString.Char8 as C
 import Data.Bits
 import Data.Word
 
-main = do ios <- socket AF_INET Stream defaultProtocol
-	  bind ios (SockAddrInet (4242::PortNumber) iNADDR_ANY )
-	  listen ios 1
-	  (s, addr) <- accept ios
-	  let addrs = hostaddr addr
-	  putStrLn ("accepted connection from " ++ addrs)
-	  send s (C.pack addrs)
+--- args <- getArgs
+
+main = echoPort 4242
+
+echoPort :: PortNumber -> IO ()
+echoPort p = do ios <- socket AF_INET Stream defaultProtocol
+                bind ios (SockAddrInet p iNADDR_ANY )
+                listen ios 1
+                (s, addr) <- accept ios
+                let addrs = hostaddr addr
+                putStrLn ("accepted connection from " ++ addrs)
+                send s (C.pack addrs)
+                return ()
 
 shiftmask :: Word32 -> Int -> Integer -> Integer
 shiftmask x y z = (.&.) (shiftR (toInteger x) y) z
