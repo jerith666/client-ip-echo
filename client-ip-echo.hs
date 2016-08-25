@@ -10,11 +10,21 @@ import Data.Word
 
 --- args <- getArgs
 
-main = echoPort 4242
+main = do args <- getArgs
+          case args of
+               []     -> usage
+               [p]    -> echoPortStr p
+               [x:xs] -> usage
 
-echoPort :: PortNumber -> IO ()
+usage = putStrLn "usage: ..."
+
+echoPortStr portStr = do case (reads portStr) of
+                              [] -> usage
+                              [(p, _)] -> echoPort p
+
+echoPort :: Integer -> IO ()
 echoPort p = do ios <- socket AF_INET Stream defaultProtocol
-                bind ios (SockAddrInet p iNADDR_ANY )
+                bind ios (SockAddrInet (fromInteger p) iNADDR_ANY )
                 listen ios 1
                 (s, addr) <- accept ios
                 let addrs = hostaddr addr
