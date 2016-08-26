@@ -26,11 +26,14 @@ echoPort :: Integer -> IO ()
 echoPort p = do ios <- socket AF_INET Stream defaultProtocol
                 bind ios (SockAddrInet (fromInteger p) iNADDR_ANY )
                 listen ios 1
-                (s, addr) <- accept ios
-                let addrs = hostaddr addr
-                putStrLn ("accepted connection from " ++ addrs)
-                send s (C.pack addrs)
-                return ()
+                echoPort1 ios
+
+echoPort1 ios = do (s, addr) <- accept ios
+                   let addrs = hostaddr addr
+                   putStrLn ("accepted connection from " ++ addrs)
+                   send s (C.pack addrs)
+                   close s
+                   echoPort1 ios
 
 shiftmask :: Word32 -> Int -> Integer -> Integer
 shiftmask x y z = (.&.) (shiftR (toInteger x) y) z
