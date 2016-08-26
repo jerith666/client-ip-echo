@@ -16,7 +16,7 @@ main = do args <- getArgs
                (p:[])  -> echoPortStr p
                (x:y:_) -> usage
 
-usage = putStrLn "usage: ..."
+usage = putStrLn "usage: client-ip-echo <port>"
 
 echoPortStr portStr = do case (reads portStr) of
                               [] -> usage
