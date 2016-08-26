@@ -12,9 +12,9 @@ import Data.Word
 
 main = do args <- getArgs
           case args of
-               []     -> usage
-               [p]    -> echoPortStr p
-               [x:xs] -> usage
+               []      -> usage
+               (p:[])  -> echoPortStr p
+               (x:y:_) -> usage
 
 usage = putStrLn "usage: ..."
 
