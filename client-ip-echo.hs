@@ -1,14 +1,11 @@
 --- nix-shell -p "haskellPackages.ghcWithPackages (pkgs: [pkgs.network])"
 
---- import Network
 import System.Environment
 import Network.Socket hiding (send, sendTo, recv, recvFrom)
 import Network.Socket.ByteString
 import qualified Data.ByteString.Char8 as C
 import Data.Bits
 import Data.Word
-
---- args <- getArgs
 
 main = do args <- getArgs
           case args of
