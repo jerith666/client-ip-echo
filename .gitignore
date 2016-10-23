@@ -2,3 +2,7 @@
 *.hi
 *.o
 client-ip-echo
+result
+dist/
+*.save*
+client-ip-echo.nix
