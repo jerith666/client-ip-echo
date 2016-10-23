@@ -22,7 +22,7 @@ synopsis:            accepts TCP connections and echoes the client's IP address 
 homepage:            http://matt.mchenryfamily.org
 
 -- The license under which the package is released.
-license:             AllRightsReserved
+license:             LGPL-3
 
 -- The file containing the license text.
 license-file:        LICENSE
