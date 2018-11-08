@@ -1,2 +1,2 @@
-{ nixpkgs ? import <nixpkgs> {}, compiler ? "ghc7102" }:
+{ nixpkgs ? import <nixpkgs> {}, compiler ? "ghc822" }:
 nixpkgs.pkgs.haskell.packages.${compiler}.callPackage ./client-ip-echo.nix { }
