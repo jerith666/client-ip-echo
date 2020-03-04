@@ -1,6 +1,8 @@
 --- nix-shell -p "haskellPackages.ghcWithPackages (pkgs: [pkgs.network])"
 
 import System.Environment
+import System.Exit
+
 import Network.Socket hiding (send, sendTo, recv, recvFrom)
 import Network.Socket.ByteString
 import qualified Data.ByteString.Char8 as C
@@ -19,11 +21,23 @@ echoPortStr portStr = do case (reads portStr) of
                               [] -> usage
                               [(p, _)] -> echoPort p
 
+passiveAddress :: AddrInfo
+passiveAddress = defaultHints { addrFlags = [AI_PASSIVE]
+                              , addrFamily = AF_INET
+                              , addrSocketType = Stream
+                              }
+
 echoPort :: Integer -> IO ()
-echoPort p = do ios <- socket AF_INET Stream defaultProtocol
-                bind ios (SockAddrInet (fromInteger p) iNADDR_ANY )
-                listen ios 1
-                echoPort1 ios
+echoPort p = do
+    addrInfos <- getAddrInfo (Just passiveAddress) Nothing (Just $ show p)
+    case addrInfos of
+        [addrInfo] -> do
+            ios <- socket AF_INET Stream defaultProtocol
+            bind ios $ addrAddress addrInfo
+            listen ios 1
+            echoPort1 ios
+        _ ->
+            exitWith $ ExitFailure 1
 
 echoPort1 ios = do (s, addr) <- accept ios
                    let addrs = hostaddr addr
